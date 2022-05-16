@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsicopataPedidos.API", "PsicopataPedidos\PsicopataPedidos.API.csproj", "{A51CFBFC-F120-4D89-9E99-53D9EA895FAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsicopataPedidos.Domain", "PsicopataPedidos.Domain\PsicopataPedidos.Domain.csproj", "{65FB2623-BB02-4444-B483-333278A1742A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsicopataPedidos.Application", "PsicopataPedidos.Application\PsicopataPedidos.Application.csproj", "{5D52C925-402D-4360-B7C3-D7432CDD20BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsicopataPedidos.Infrastructure", "PsicopataPedidos.Infrastructure\PsicopataPedidos.Infrastructure.csproj", "{3E4B0213-29C8-44B8-B749-FB5BC4145123}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A51CFBFC-F120-4D89-9E99-53D9EA895FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A51CFBFC-F120-4D89-9E99-53D9EA895FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A51CFBFC-F120-4D89-9E99-53D9EA895FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A51CFBFC-F120-4D89-9E99-53D9EA895FAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65FB2623-BB02-4444-B483-333278A1742A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65FB2623-BB02-4444-B483-333278A1742A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65FB2623-BB02-4444-B483-333278A1742A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65FB2623-BB02-4444-B483-333278A1742A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D52C925-402D-4360-B7C3-D7432CDD20BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D52C925-402D-4360-B7C3-D7432CDD20BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D52C925-402D-4360-B7C3-D7432CDD20BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D52C925-402D-4360-B7C3-D7432CDD20BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E4B0213-29C8-44B8-B749-FB5BC4145123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E4B0213-29C8-44B8-B749-FB5BC4145123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E4B0213-29C8-44B8-B749-FB5BC4145123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E4B0213-29C8-44B8-B749-FB5BC4145123}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E1248AA-6CC7-426C-B8B9-7A2C7B2C7082}
+	EndGlobalSection
+EndGlobal
