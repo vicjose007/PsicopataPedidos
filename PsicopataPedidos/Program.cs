@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using PsicopataPedidos.Application;
 using PsicopataPedidos.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddControllers(options =>
 {
     options.EnableEndpointRouting = false;
-}).AddFluentValidation();
+}).AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {

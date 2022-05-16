@@ -13,7 +13,7 @@ namespace PsicopataPedidos.Application.Mappings
     {
         public UserProfile()
         {
-            CreateMap<UserDto, User>();
+            CreateMap<User, UserDto>();
         }
 
     }
