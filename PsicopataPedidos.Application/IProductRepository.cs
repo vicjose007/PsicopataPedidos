@@ -10,10 +10,9 @@ namespace PsicopataPedidos.Application
     public interface IProductRepository
     {
         List<Product> GetAllProducts();
-
-        Product CreateProduct(Product product);
-
-        Product DeleteProduct(Product product);
-        
+        Task<Product> CreateProduct(Product product);
+        Task<Product> DeleteProduct(int id);
+        Task<Product> GetProductById(int id);
+        Task<Product> UpdateProduct(Product product);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PsicopataPedidos.Application;
+using PsicopataPedidos.Application.Dtos;
 using PsicopataPedidos.Domain.Models;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,27 +19,49 @@ namespace PsicopataPedidos.API.Controllers
         {
             _service = service;
         }
-        [HttpGet]
-        public ActionResult<List<Product>> Get()
+        [HttpGet("[action]/")]
+        public ActionResult<List<Product>> GetAllProducts()
         {
             var productsFromService = _service.GetAllProducts();
             return Ok(productsFromService);
         }
 
-
-        [HttpPost]
-        public ActionResult<Product> PostProduct(Product product)   
+        [HttpGet("{id}")]
+        public virtual async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var productsFromService = _service.CreateProduct(product);
-            return Ok(product);
+            var result = await _service.GetByIdAsync(id);
+
+            if (result is null)
+                return NotFound($"El usuario con el id {id} no existe");
+
+            return Ok(result);
+        }
+
+        [HttpPost("[action]/")]
+        public virtual async Task<IActionResult> AddProduct(ProductDto product)   
+        {
+            var result = await _service.AddAsync(product);
+            return CreatedAtAction(WebRequestMethods.Http.Get, new { id = result.ProductId });
         }
 
 
-        [HttpDelete]
-        public ActionResult<Product> DeleteProduct(Product product)
+        [HttpDelete("{id}")]
+        public ActionResult<Product> DeleteProduct([FromRoute]int id)
         {
-            var productsFromService = _service.DeleteProduct(product);
-            return Ok(product);
+            var result = _service.DeleteByIdAsync(id);
+            if (result is null)
+                return NotFound($"El usuario con el id {id} no existe");
+            return Ok(result);
+        }
+        [HttpPut("{id}")]
+        public virtual async Task<IActionResult> Put([FromRoute] int id, [FromBody] ProductDto dto)
+        {
+            var result = await _service.UpdateAsync(id, dto);
+
+            if (result is null)
+                return NotFound($"El usuario con el id {id} no existe");
+
+            return Ok(result);
         }
     }
 }
