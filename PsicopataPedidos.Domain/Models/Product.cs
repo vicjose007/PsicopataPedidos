@@ -9,7 +9,6 @@ namespace PsicopataPedidos.Domain.Models
 {
     public class Product
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public string? ProductName { get; set; }
         public string? Description { get; set; }
@@ -17,12 +16,12 @@ namespace PsicopataPedidos.Domain.Models
         public double Price { get; set; }
         public string? Category { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
 
-        public IEnumerable<ShoppingList> ShoppingLists { get; set; }
+        //public IEnumerable<ShoppingList> ShoppingLists { get; set; }
 
-        [JsonIgnore]
-        public IEnumerable<ProductCategory> ProductCategories { get; set; }
+        //[JsonIgnore]
+        //public IEnumerable<ProductCategory> ProductCategories { get; set; }
 
 
     }

@@ -17,7 +17,7 @@ namespace PsicopataPedidos.API.Controllers
         {
             _service = service;
         }
-        [HttpGet, Authorize]
+        [HttpGet]
         public ActionResult<List<Product>> Get()
         {
             var productsFromService = _service.GetAllProducts();
@@ -25,7 +25,7 @@ namespace PsicopataPedidos.API.Controllers
         }
 
 
-        [HttpPost, Authorize]
+        [HttpPost]
         public ActionResult<Product> PostProduct(Product product)   
         {
             var productsFromService = _service.CreateProduct(product);
@@ -33,7 +33,7 @@ namespace PsicopataPedidos.API.Controllers
         }
 
 
-        [HttpDelete, Authorize]
+        [HttpDelete]
         public ActionResult<Product> DeleteProduct(Product product)
         {
             var productsFromService = _service.DeleteProduct(product);
