@@ -27,7 +27,7 @@ namespace PsicopataPedidos.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {
-            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             
             user.Name = request.Name;
