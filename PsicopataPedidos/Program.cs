@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
+builder.Services.AddSingleton(configuration);
 builder.Services.AddDbContext<ProductDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
 b => b.MigrationsAssembly("PsicopataPedidos.API")));
 builder.Services.AddScoped<IProductService, ProductService>();

@@ -25,10 +25,10 @@ namespace PsicopataPedidos.Infrastructure
 
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
- 
-
-
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
 
     }
 }

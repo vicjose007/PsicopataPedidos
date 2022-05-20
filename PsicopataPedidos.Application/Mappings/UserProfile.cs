@@ -14,6 +14,7 @@ namespace PsicopataPedidos.Application.Mappings
         public UserProfile()
         {
             CreateMap<User, UserDto>();
+            CreateMap<Product, ProductDto>().ReverseMap();
         }
 
     }
