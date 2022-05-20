@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PsicopataPedidos.Application;
 using PsicopataPedidos.Application.Dtos;
 using PsicopataPedidos.Domain.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,44 +11,51 @@ namespace PsicopataPedidos.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class AuthController : ControllerBase
     {
         public static User user = new User();
         private readonly IConfiguration _configuration;
+        private readonly IUserService _service;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, IUserService service)
         {
             _configuration = configuration;
+            _service = service;
+
         }
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
+            
             user.Name = request.Name;
             user.Password = request.Password;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            PostUser(user);
 
             return Ok(user);
+        } 
+   
+        private User PostUser(User user)
+        {
 
-
+            var userFromService = _service.CreateUser(user);
+            return userFromService;
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
+        public async Task<ActionResult<string>> Login(User request)
         {
-            if (user.Name != request.Name)
+            var userFind = _service.GetAllUsers().Where(x => x.Name == request.Name && x.Password == request.Password).FirstOrDefault();
+            if (userFind is null)
             {
                 return BadRequest("User not found.");
             }
 
-            if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
-            {
-                return BadRequest("Wrong password.");
-            }
-
-            string token = CreateToken(user);
+            string token = CreateToken(userFind);
 
             return Ok(token);
 
@@ -58,7 +66,8 @@ namespace PsicopataPedidos.API.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Name)
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id)),
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
