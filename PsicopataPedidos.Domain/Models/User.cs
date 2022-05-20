@@ -24,10 +24,10 @@ namespace PsicopataPedidos.Domain.Models
         public byte[]? PasswordHash { get; set; } 
         [JsonIgnore]
         public byte[]? PasswordSalt { get; set; } 
-        //[JsonIgnore]
-        //public IEnumerable<Order>? Orders { get; set; }
-        //[JsonIgnore]
-        //public IEnumerable<ShoppingList>? ShoppingLists { get; set; }
+        [JsonIgnore]
+        public IEnumerable<Order>? Orders { get; set; }
+        [JsonIgnore]
+        public IEnumerable<ShoppingList>? ShoppingLists { get; set; }
 
     }
 }

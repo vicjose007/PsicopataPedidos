@@ -51,8 +51,6 @@ builder.Services.AddDbContext<ProductDbContext>(opt => opt.UseSqlServer(configur
 b => b.MigrationsAssembly("PsicopataPedidos.API")));
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddCors(x => x.AddPolicy("AllowAnyOrigin", x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()));
 
 

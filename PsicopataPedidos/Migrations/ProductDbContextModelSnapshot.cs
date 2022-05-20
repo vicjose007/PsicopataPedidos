@@ -144,12 +144,6 @@ namespace PsicopataPedidos.API.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PasswordHash")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .HasColumnType("varbinary(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -169,7 +163,7 @@ namespace PsicopataPedidos.API.Migrations
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.ProductCategory", b =>
                 {
                     b.HasOne("PsicopataPedidos.Domain.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductCategories")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -180,7 +174,7 @@ namespace PsicopataPedidos.API.Migrations
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.ShoppingList", b =>
                 {
                     b.HasOne("PsicopataPedidos.Domain.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ShoppingLists")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -194,6 +188,13 @@ namespace PsicopataPedidos.API.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PsicopataPedidos.Domain.Models.Product", b =>
+                {
+                    b.Navigation("ProductCategories");
+
+                    b.Navigation("ShoppingLists");
                 });
 
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.User", b =>
