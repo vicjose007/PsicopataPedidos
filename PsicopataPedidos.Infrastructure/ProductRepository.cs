@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PsicopataPedidos.Application;
+﻿using PsicopataPedidos.Application;
 using PsicopataPedidos.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -16,41 +15,25 @@ namespace PsicopataPedidos.Infrastructure
 
         };
         private readonly ProductDbContext _productDbContext;
-        private readonly DbSet<Product> _productSet;
 
-        public ProductRepository(ProductDbContext productDbContext, DbSet<Product> productSet)
+        public ProductRepository(ProductDbContext productDbContext)
         {
             _productDbContext = productDbContext;
-            _productSet = productSet;
         }
-        public IQueryable<Product> Query()
+
+        public Product CreateProduct(Product product)
         {
-            return _productSet.AsQueryable();
-        }
-        public async Task<Product> GetProductById(int id)
-        {
-            var product = await _productSet.Where(x => x.Id == id).FirstOrDefaultAsync();
+            _productDbContext.Products.Add(product);
+            _productDbContext.SaveChanges();
             return product;
         }
 
-        public async Task<Product> CreateProduct(Product product)
+        public Product DeleteProduct(Product product)
         {
-            var result = await _productSet.AddAsync(product);
-            await _productDbContext.SaveChangesAsync();
-            return result.Entity;
-        }
+            _productDbContext.Products.Remove(product);
+            _productDbContext.SaveChanges();
 
-        public async Task<Product> DeleteProduct(int Id)
-        {
-           var product = await GetProductById(Id);
-           var result = _productSet.Remove(product);
-           return result.Entity;
-        }
-        public async Task<Product> UpdateProduct(Product product)
-        {
-            _productDbContext.Entry(product).State = EntityState.Modified;
-            await _productDbContext.SaveChangesAsync();
-            return product;
+            return null;
         }
 
         public List<Product> GetAllProducts()
