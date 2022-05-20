@@ -12,8 +12,8 @@ using PsicopataPedidos.Infrastructure;
 namespace PsicopataPedidos.API.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20220515220337_Migration1")]
-    partial class Migration1
+    [Migration("20220519183335_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -146,6 +146,12 @@ namespace PsicopataPedidos.API.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -165,7 +171,7 @@ namespace PsicopataPedidos.API.Migrations
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.ProductCategory", b =>
                 {
                     b.HasOne("PsicopataPedidos.Domain.Models.Product", "Product")
-                        .WithMany("ProductCategories")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -176,7 +182,7 @@ namespace PsicopataPedidos.API.Migrations
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.ShoppingList", b =>
                 {
                     b.HasOne("PsicopataPedidos.Domain.Models.Product", "Product")
-                        .WithMany("ShoppingLists")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -190,13 +196,6 @@ namespace PsicopataPedidos.API.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PsicopataPedidos.Domain.Models.Product", b =>
-                {
-                    b.Navigation("ProductCategories");
-
-                    b.Navigation("ShoppingLists");
                 });
 
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.User", b =>

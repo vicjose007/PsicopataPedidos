@@ -1,9 +1,5 @@
-﻿using PsicopataPedidos.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using PsicopataPedidos.Domain.Models;
 
 namespace PsicopataPedidos.Application
 {
@@ -31,9 +27,10 @@ namespace PsicopataPedidos.Application
 
         public List<Product> GetAllProducts()
         {
-           var products = _productRepository.GetAllProducts();
+            var products = _productRepository.GetAllProducts();
 
             return products;
         }
     }
 }
+
