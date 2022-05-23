@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PsicopataPedidos.Application;
+using PsicopataPedidos.Application.OrderServices;
+using PsicopataPedidos.Application.ProductCategoryServices;
 using PsicopataPedidos.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
@@ -51,8 +53,14 @@ builder.Services.AddDbContext<ProductDbContext>(opt => opt.UseSqlServer(configur
 b => b.MigrationsAssembly("PsicopataPedidos.API")));
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
+builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
+builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddCors(x => x.AddPolicy("AllowAnyOrigin", x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()));
 
 

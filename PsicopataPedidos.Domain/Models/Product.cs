@@ -14,7 +14,10 @@ namespace PsicopataPedidos.Domain.Models
         public string? Description { get; set; }
         public int Stock { get; set; }
         public double Price { get; set; }
-        public string? Category { get; set; }
+
+        //Foreing key
+        public int ProductCategoryId { get; set; }
+        public ProductCategory? ProductCategory { get; set; }
 
         //[JsonIgnore]
 

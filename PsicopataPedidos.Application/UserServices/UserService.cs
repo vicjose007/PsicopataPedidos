@@ -28,13 +28,6 @@ namespace PsicopataPedidos.Application
             _userRepository.DeleteUser(user);
             return user;
         }
-
-        public List<User> GetAllUsers(User user)
-        {
-            var users = _userRepository.GetAllUsers();
-            return users;
-        }
-
         public List<User> GetAllUsers()
         {
             var users = _userRepository.GetAllUsers();

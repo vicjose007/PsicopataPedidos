@@ -21,9 +21,9 @@ namespace PsicopataPedidos.Infrastructure
 
         public DbSet<Order> Orders { get; set; }
 
-        public DbSet<ShoppingList> ShoppingLists { get; set; }
+        public DbSet<ShoppingList> ShoppingList { get; set; }
 
-        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductCategory> ProductsCategories { get; set; }
 
  
 

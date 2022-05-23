@@ -12,7 +12,7 @@ using PsicopataPedidos.Infrastructure;
 namespace PsicopataPedidos.API.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20220519183335_InitialMigration")]
+    [Migration("20220522221426_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,14 +53,14 @@ namespace PsicopataPedidos.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("ProductCategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
@@ -69,6 +69,8 @@ namespace PsicopataPedidos.API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductCategoryId");
 
                     b.ToTable("Products");
                 });
@@ -84,14 +86,9 @@ namespace PsicopataPedidos.API.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductsCategories");
                 });
 
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.ShoppingList", b =>
@@ -120,7 +117,7 @@ namespace PsicopataPedidos.API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShoppingLists");
+                    b.ToTable("ShoppingList");
                 });
 
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.User", b =>
@@ -160,7 +157,7 @@ namespace PsicopataPedidos.API.Migrations
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.Order", b =>
                 {
                     b.HasOne("PsicopataPedidos.Domain.Models.User", "User")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -168,15 +165,15 @@ namespace PsicopataPedidos.API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PsicopataPedidos.Domain.Models.ProductCategory", b =>
+            modelBuilder.Entity("PsicopataPedidos.Domain.Models.Product", b =>
                 {
-                    b.HasOne("PsicopataPedidos.Domain.Models.Product", "Product")
+                    b.HasOne("PsicopataPedidos.Domain.Models.ProductCategory", "ProductCategory")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductCategory");
                 });
 
             modelBuilder.Entity("PsicopataPedidos.Domain.Models.ShoppingList", b =>
@@ -188,7 +185,7 @@ namespace PsicopataPedidos.API.Migrations
                         .IsRequired();
 
                     b.HasOne("PsicopataPedidos.Domain.Models.User", "User")
-                        .WithMany("ShoppingLists")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -196,13 +193,6 @@ namespace PsicopataPedidos.API.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PsicopataPedidos.Domain.Models.User", b =>
-                {
-                    b.Navigation("Orders");
-
-                    b.Navigation("ShoppingLists");
                 });
 #pragma warning restore 612, 618
         }

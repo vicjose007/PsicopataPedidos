@@ -10,10 +10,6 @@ namespace PsicopataPedidos.Domain.Models
     {
         public int Id { get; set; }
 
-        //Foreing Key Product
-        public int ProductId { get; set; }
-        public Product? Product { get; set; }
-
         public string? Category { get; set; }
     }
 }
