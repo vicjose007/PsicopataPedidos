@@ -25,7 +25,7 @@ namespace PsicopataPedidos.API.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public ActionResult<ProductCategory> PostProduct(ProductCategory productCategory)
         {
             var productsCategoriesFromService = _service.CreateProductCategory(productCategory);
@@ -33,7 +33,7 @@ namespace PsicopataPedidos.API.Controllers
         }
 
 
-        [HttpDelete]
+        [HttpDelete, Authorize]
         public ActionResult<ProductCategory> DeleteProduct(ProductCategory productCategory)
         {
             var productsCategoriesFromService = _service.DeleteProductCategory(productCategory);
