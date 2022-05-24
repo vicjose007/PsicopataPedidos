@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PsicopataPedidos.Application;
@@ -9,6 +10,7 @@ using PsicopataPedidos.Application.ProductCategoryServices;
 using PsicopataPedidos.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
+
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,18 +37,28 @@ builder.Services.AddSwaggerGen(options => {
     options.OperationFilter<SecurityRequirementsOperationFilter>(); 
 }
     );
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        options.TokenValidationParameters = new TokenValidationParameters
+//        {
+//            ValidateIssuerSigningKey = true,
+//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+//            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+//            ValidateIssuer = false,
+//            ValidateAudience = false,
+//        };
+//    });
+
+// Adds Microsoft Identity platform (Azure AD B2C) support to protect this Api
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
+        .AddMicrosoftIdentityWebApi(options =>
         {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-        };
-    });
+            builder.Configuration.Bind("AzureAdB2C", options);
+
+            options.TokenValidationParameters.NameClaimType = "name";
+        },
+options => { builder.Configuration.Bind("AzureAdB2C", options); });
 
 
 builder.Services.AddDbContext<ProductDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
