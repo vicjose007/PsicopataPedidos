@@ -14,6 +14,7 @@ namespace PsicopataPedidos.Application
         Product CreateProduct(Product product);
 
         Product DeleteProduct(Product productId);
-        
+
+        Product UpdateProduct(Product product);
     }
 }

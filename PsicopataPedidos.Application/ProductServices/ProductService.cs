@@ -31,6 +31,13 @@ namespace PsicopataPedidos.Application
 
             return products;
         }
+
+        public Product UpdateProduct(Product product)
+        {
+            var products = _productRepository.UpdateProduct(product);
+
+            return products;
+        }
     }
 }
 

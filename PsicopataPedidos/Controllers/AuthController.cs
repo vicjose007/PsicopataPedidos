@@ -17,11 +17,13 @@ namespace PsicopataPedidos.API.Controllers
         public static User user = new User();
         private readonly IConfiguration _configuration;
         private readonly IUserService _service;
+        private readonly IHttpContextAccessor _accesor;
 
-        public AuthController(IConfiguration configuration, IUserService service)
+        public AuthController(IConfiguration configuration, IUserService service, IHttpContextAccessor accessor)
         {
             _configuration = configuration;
             _service = service;
+            _accesor = accessor;
 
         }
         [HttpPost("register")]
@@ -101,6 +103,29 @@ namespace PsicopataPedidos.API.Controllers
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
             }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetCurrentUser ()
+        {
+            var result = await GetCurrentADUser();
+            return Ok(result);
+        }
+
+        private async Task<UserAD> GetCurrentADUser()
+        {
+            if (_accesor.HttpContext is null) return null;
+            var adUser = new UserAD
+            {
+                Id = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value,
+                Name = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type ==
+               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value,
+                Email = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Value ==
+               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/preferred_username")?.Value,
+                TenantId = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type
+               == "http://schemas.microsoft.com/identity/claims/tenantid")?.Value
+            };
+            return adUser;
         }
     }
 }

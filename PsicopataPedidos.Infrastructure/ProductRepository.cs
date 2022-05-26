@@ -40,5 +40,12 @@ namespace PsicopataPedidos.Infrastructure
         {
             return _productDbContext.Products.ToList();  
         }
+
+        public Product UpdateProduct(Product product)
+        {
+            _productDbContext.Products.Update(product);
+            _productDbContext.SaveChanges();
+            return product;
+        }
     }
 }

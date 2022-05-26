@@ -26,39 +26,55 @@ builder.Services.AddControllers(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "swaggerAADdemo", Version = "v1" });
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-        In = ParameterLocation.Header,
+        Description = "OAuth2.0 Auth Code with PKCE",
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
+        Type = SecuritySchemeType.OAuth2,
+        Flows = new OpenApiOAuthFlows
+        {
+            AuthorizationCode = new OpenApiOAuthFlow
+            {
+                AuthorizationUrl = new Uri(builder.Configuration["AzureAdB2C:Instance"]),
+                TokenUrl = new Uri(builder.Configuration["AzureAdB2C:TokenUrl"]),
+                Scopes = new Dictionary<string, string>
+                {
+                    {builder.Configuration["AzureAdB2C:ApiScope"], "read" }
+                }
+            }
+        },
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+            },
+            new [] { builder.Configuration["AzureAdB2C:ClientId"] }
+        }
     });
 
-    options.OperationFilter<SecurityRequirementsOperationFilter>(); 
-}
-    );
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddJwtBearer(options =>
-//    {
-//        options.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuerSigningKey = true,
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-//            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-//            ValidateIssuer = false,
-//            ValidateAudience = false,
-//        };
-//    });
+    //options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
-// Adds Microsoft Identity platform (Azure AD B2C) support to protect this Api
+    //options.OperationFilter<SecurityRequirementsOperationFilter>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddMicrosoftIdentityWebApi(options =>
-        {
-            builder.Configuration.Bind("AzureAdB2C", options);
+    .AddMicrosoftIdentityWebApi(builder.Configuration, "AzureAdB2C");
 
-            options.TokenValidationParameters.NameClaimType = "name";
-        },
-options => { builder.Configuration.Bind("AzureAdB2C", options); });
+
+
+
+//Adds Microsoft Identity platform (Azure AD B2C) support to protect this Api
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//        .AddMicrosoftIdentityWebApi(options =>
+//        {
+//            builder.Configuration.Bind("AzureAdB2C", options);
+
+//            options.TokenValidationParameters.NameClaimType = "name";
+//        },
+//options => { builder.Configuration.Bind("AzureAd", options); });
 
 
 builder.Services.AddDbContext<ProductDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
@@ -82,7 +98,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        app.UseDeveloperExceptionPage();
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "swaggerAADdemo v1");
+        c.OAuthClientId(builder.Configuration["AzureAdB2C:ClientId"]);
+        c.OAuthUsePkce();
+        c.OAuthScopeSeparator(" ");
+    });
 }
 app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 

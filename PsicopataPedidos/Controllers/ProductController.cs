@@ -24,12 +24,39 @@ namespace PsicopataPedidos.API.Controllers
             return Ok(productsFromService);
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<Product> Get(int id)
+        {
+            var products = _service.GetAllProducts().Find(x => x.Id == id);
+            if (products == null)
+                return BadRequest("Product not found");
+            return Ok(products);
+        }
+
 
         [HttpPost, Authorize]
-        public ActionResult<Product> PostProduct(Product product)   
+        public ActionResult<Product> PostProduct(Product product)
         {
-            var productsFromService = _service.CreateProduct(product);
+            _service.CreateProduct(product);
             return Ok(product);
+        }
+
+
+        [HttpPut]
+        public ActionResult<List<Product>> UpdateProduct(Product request)
+        {
+            var products = _service.GetAllProducts().Find(x => x.Id == request.Id);
+            if (products == null)
+                return BadRequest("Product not found");
+
+
+            products.ProductName = request.ProductName;
+            products.Description = request.Description;
+            products.ProductCategoryId = request.ProductCategoryId;
+            products.Price = request.Price;
+            products.Stock = request.Stock;
+
+            return Ok(products);
         }
 
 
@@ -38,6 +65,16 @@ namespace PsicopataPedidos.API.Controllers
         {
             var productsFromService = _service.DeleteProduct(product);
             return Ok(product);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<List<Product>> DeleteProduct(int id)
+        {
+            var products = _service.GetAllProducts().Find(x => x.Id == id);
+            if (products == null)
+                return BadRequest("Product not found");
+            _service.DeleteProduct(products);
+            return Ok(products);
         }
     }
 }
