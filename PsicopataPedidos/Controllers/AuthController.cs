@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PsicopataPedidos.Application;
 using PsicopataPedidos.Application.Dtos;
@@ -105,7 +106,7 @@ namespace PsicopataPedidos.API.Controllers
             }
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("[action]"), Authorize]
         public async Task<IActionResult> GetCurrentUser ()
         {
             var result = await GetCurrentADUser();
@@ -118,12 +119,9 @@ namespace PsicopataPedidos.API.Controllers
             var adUser = new UserAD
             {
                 Id = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value,
-                Name = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type ==
-               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value,
-                Email = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Value ==
-               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/preferred_username")?.Value,
-                TenantId = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type
-               == "http://schemas.microsoft.com/identity/claims/tenantid")?.Value
+                Name = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type =="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname")?.Value,
+                Email =  _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value,
+                TenantId = _accesor.HttpContext.User.Claims.FirstOrDefault(x => x.Type== "http://schemas.microsoft.com/identity/claims/tenantid")?.Value
             };
             return adUser;
         }

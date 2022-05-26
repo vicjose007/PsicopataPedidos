@@ -17,7 +17,7 @@ namespace PsicopataPedidos.API.Controllers
         {
             _service = service;
         }
-        [HttpGet]
+        [HttpGet, Authorize]
         public ActionResult<List<Product>> Get()
         {
             var productsFromService = _service.GetAllProducts();
